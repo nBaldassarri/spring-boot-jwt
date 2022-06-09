@@ -1,23 +1,17 @@
-package murraco.model;
+package nbaldassarri.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
 @Data // Create getters and setters
 @NoArgsConstructor
-public class AppUser {
+public class Users {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +28,6 @@ public class AppUser {
   private String password;
 
   @ElementCollection(fetch = FetchType.EAGER)
-  List<AppUserRole> appUserRoles;
+  List<UserRoles> userRoles;
 
 }

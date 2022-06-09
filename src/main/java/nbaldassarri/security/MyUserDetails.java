@@ -1,13 +1,13 @@
-package murraco.security;
+package nbaldassarri.security;
 
 import lombok.RequiredArgsConstructor;
-import murraco.model.AppUser;
+import nbaldassarri.model.Users;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import murraco.repository.UserRepository;
+import nbaldassarri.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -17,16 +17,16 @@ public class MyUserDetails implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    final AppUser appUser = userRepository.findByUsername(username);
+    final Users users = userRepository.findByUsername(username);
 
-    if (appUser == null) {
+    if (users == null) {
       throw new UsernameNotFoundException("User '" + username + "' not found");
     }
 
     return org.springframework.security.core.userdetails.User//
         .withUsername(username)//
-        .password(appUser.getPassword())//
-        .authorities(appUser.getAppUserRoles())//
+        .password(users.getPassword())//
+        .authorities(users.getUserRoles())//
         .accountExpired(false)//
         .accountLocked(false)//
         .credentialsExpired(false)//

@@ -1,27 +1,27 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:test_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:sqlserver://localhost:1433;databaseName=test
+    # url: jdbc:h2:mem:test_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     # url: jdbc:mysql://localhost:3306/user_db
-    username: root
-    password: root
-  tomcat:
-    max-wait: 20000
-    max-active: 50
-    max-idle: 20
-    min-idle: 15
+    username: sa
+    password: Localhost@
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.SQLServerDialect
+        # dialect: org.hibernate.dialect.H2Dialect
         # dialect: org.hibernate.dialect.MySQL8Dialect
+        default_schema: dbo
         format_sql: true
         id:
           new_generator_mappings: false
 
 server:
-   port: 8080 # This is the default port anyway, but you can change it here
+   port: 8082 # This is the default port anyway, but you can change it here
+   servlet:
+     context-path: /api
 
 security:
   jwt:

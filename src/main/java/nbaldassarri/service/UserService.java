@@ -1,4 +1,4 @@
-package murraco.service;
+package nbaldassarri.service;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,10 +10,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import murraco.exception.CustomException;
-import murraco.model.AppUser;
-import murraco.repository.UserRepository;
-import murraco.security.JwtTokenProvider;
+import nbaldassarri.exception.CustomException;
+import nbaldassarri.model.Users;
+import nbaldassarri.repository.UserRepository;
+import nbaldassarri.security.JwtTokenProvider;
 
 @Service
 @RequiredArgsConstructor
@@ -27,17 +27,17 @@ public class UserService {
   public String signin(String username, String password) {
     try {
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-      return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getAppUserRoles());
+      return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getUserRoles());
     } catch (AuthenticationException e) {
       throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 
-  public String signup(AppUser appUser) {
-    if (!userRepository.existsByUsername(appUser.getUsername())) {
-      appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-      userRepository.save(appUser);
-      return jwtTokenProvider.createToken(appUser.getUsername(), appUser.getAppUserRoles());
+  public String signup(Users users) {
+    if (!userRepository.existsByUsername(users.getUsername())) {
+      users.setPassword(passwordEncoder.encode(users.getPassword()));
+      userRepository.save(users);
+      return jwtTokenProvider.createToken(users.getUsername(), users.getUserRoles());
     } else {
       throw new CustomException("Username is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
     }
@@ -47,20 +47,20 @@ public class UserService {
     userRepository.deleteByUsername(username);
   }
 
-  public AppUser search(String username) {
-    AppUser appUser = userRepository.findByUsername(username);
-    if (appUser == null) {
+  public Users search(String username) {
+    Users users = userRepository.findByUsername(username);
+    if (users == null) {
       throw new CustomException("The user doesn't exist", HttpStatus.NOT_FOUND);
     }
-    return appUser;
+    return users;
   }
 
-  public AppUser whoami(HttpServletRequest req) {
+  public Users whoami(HttpServletRequest req) {
     return userRepository.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
   }
 
   public String refresh(String username) {
-    return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getAppUserRoles());
+    return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getUserRoles());
   }
 
 }

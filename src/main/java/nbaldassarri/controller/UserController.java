@@ -1,9 +1,9 @@
-package murraco.controller;
+package nbaldassarri.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
 import lombok.RequiredArgsConstructor;
-import murraco.model.AppUser;
+import nbaldassarri.model.Users;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,9 +21,9 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Authorization;
-import murraco.dto.UserDataDTO;
-import murraco.dto.UserResponseDTO;
-import murraco.service.UserService;
+import nbaldassarri.dto.UserDataDTO;
+import nbaldassarri.dto.UserResponseDTO;
+import nbaldassarri.service.UserService;
 
 @RestController
 @RequestMapping("/users")
@@ -52,7 +52,7 @@ public class UserController {
       @ApiResponse(code = 403, message = "Access denied"), //
       @ApiResponse(code = 422, message = "Username is already in use")})
   public String signup(@ApiParam("Signup User") @RequestBody UserDataDTO user) {
-    return userService.signup(modelMapper.map(user, AppUser.class));
+    return userService.signup(modelMapper.map(user, Users.class));
   }
 
   @DeleteMapping(value = "/{username}")

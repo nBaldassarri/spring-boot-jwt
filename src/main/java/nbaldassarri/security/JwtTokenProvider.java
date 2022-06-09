@@ -1,4 +1,4 @@
-package murraco.security;
+package nbaldassarri.security;
 
 import java.util.Base64;
 import java.util.Date;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
-import murraco.model.AppUserRole;
+import nbaldassarri.model.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import murraco.exception.CustomException;
+import nbaldassarri.exception.CustomException;
 
 @Component
 public class JwtTokenProvider {
@@ -46,7 +46,7 @@ public class JwtTokenProvider {
     secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
   }
 
-  public String createToken(String username, List<AppUserRole> appUserRoles) {
+  public String createToken(String username, List<UserRoles> appUserRoles) {
 
     Claims claims = Jwts.claims().setSubject(username);
     claims.put("auth", appUserRoles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority())).filter(Objects::nonNull).collect(Collectors.toList()));
